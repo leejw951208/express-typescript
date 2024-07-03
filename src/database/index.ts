@@ -1,14 +1,9 @@
 import { Sequelize } from "sequelize";
 import Config from "./config/config";
+import { initMember, Member } from "./model/member";
+import { initTeam, Team } from "./model/team";
 
 const config = Config["dev"];
-
-interface DB {
-  [key: string]: any;
-  sequlize?: Sequelize;
-}
-
-const db: DB = {};
 
 const sequelize = new Sequelize(
   config.database,
@@ -20,6 +15,9 @@ const sequelize = new Sequelize(
   }
 );
 
-db.sequlize = sequelize;
+initMember(sequelize);
+initTeam(sequelize);
+
+Member.belongsTo(Team, { foreignKey: "team_id" });
 
 export default sequelize;
